@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  pets      Pet[]
+  createdAt DateTime @default(now())
+
+  @@map("users")
+}
+
+model Pet {
+  id           Int       @id @default(autoincrement())
+  name         String
+  species      String
+  age          Int
+  weight       Float
+  observations String?
+  ownerId      Int
+  owner        User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  schedules    Schedule[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("pets")
+}
+
+model Schedule {
+  id           Int       @id @default(autoincrement())
+  date         DateTime
+  service      String
+  status       String    @default("PENDING")
+  observations String?
+  petId        Int
+  pet          Pet       @relation(fields: [petId], references: [id], onDelete: Cascade)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("schedules")
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  action    String
+  details   Json
+  userId    Int?
+  timestamp DateTime @default(now())
+
+  @@map("audit_logs")
+}
+
+
+

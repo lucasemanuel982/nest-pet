@@ -1,0 +1,48 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: pet-management-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: pet_management
+      MYSQL_USER: petuser
+      MYSQL_PASSWORD: petpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - pet-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pet-management-api
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: mysql://petuser:petpassword@mysql:3306/pet_management
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+      WEBHOOK_URL: https://webhook.site/54a6c8ec-fb87-4444-9674-a52ef69038a7
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - pet-network
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+networks:
+  pet-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
