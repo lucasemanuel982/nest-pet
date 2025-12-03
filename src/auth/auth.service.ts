@@ -80,10 +80,23 @@ export class AuthService {
         id: true,
         email: true,
         name: true,
+        role: true,
+        permissions: {
+          select: {
+            slug: true,
+          },
+        },
         createdAt: true,
       },
     });
 
-    return user;
+    if (user) {
+      return {
+        ...user,
+        permissions: user.permissions.map((p) => p.slug),
+      };
+    }
+
+    return null;
   }
 }

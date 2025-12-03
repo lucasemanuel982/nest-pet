@@ -10,6 +10,8 @@ API REST robusta e escalável para gestão de pets e agendamentos, desenvolvida 
 - [Executando a Aplicação](#executando-a-aplicação)
 - [Documentação da API](#documentação-da-api)
 - [Endpoints](#endpoints)
+- [Permissões](#permissões)
+- [Usuários de Teste](#usuários-de-teste)
 - [Testes](#testes)
 - [Tecnologias](#tecnologias)
 
@@ -184,6 +186,65 @@ A API utiliza JWT (JSON Web Tokens) para autenticação. Após fazer login, voc�
 ```
 Authorization: Bearer <seu-token>
 ```
+
+## Permissões
+
+A API utiliza um sistema de permissões baseado em roles e permissões específicas. Cada endpoint requer permissões específicas para ser acessado.
+
+### Permissões Disponíveis
+
+#### Usuários
+- `user_create` - Criar usuários
+- `user_read` - Ler usuários
+- `user_update` - Atualizar usuários
+- `user_delete` - Deletar usuários
+
+#### Pets
+- `pet_create` - Criar pets
+- `pet_read` - Ler pets
+- `pet_update` - Atualizar pets
+- `pet_delete` - Deletar pets
+
+#### Agendamentos
+- `schedule_create` - Criar agendamentos
+- `schedule_read` - Ler agendamentos
+- `schedule_update` - Atualizar agendamentos
+- `schedule_delete` - Deletar agendamentos
+
+### Como Funciona
+
+Cada endpoint protegido verifica se o usuário autenticado possui a permissão necessária. Se o usuário não tiver a permissão requerida, receberá um erro 403 (Forbidden).
+
+Exemplo de uso nos controllers:
+- `@RequirePermissions('pet_create')` - Requer permissão para criar pets
+- `@RequirePermissions('pet_read')` - Requer permissão para ler pets
+- `@RequirePermissions('schedule_read')` - Requer permissão para ler agendamentos
+
+## Usuários de Teste
+
+Após executar o seed (`npm run seed`), os seguintes usuários de teste são criados no banco de dados:
+
+### Usuário Administrador
+
+- **Email:** `usuario@example.com`
+- **Senha:** `senha123`
+- **Nome:** João Silva
+- **Role:** ADMIN
+- **Permissões:** Todas as permissões (criação, leitura, atualização e exclusão de usuários, pets e agendamentos)
+
+Este usuário pode realizar todas as operações na API.
+
+### Usuário Somente Leitura
+
+- **Email:** `leitor@example.com`
+- **Senha:** `senha123`
+- **Nome:** Maria Leitora
+- **Role:** USER
+- **Permissões:** 
+  - `pet_read` - Pode listar e visualizar pets
+  - `schedule_read` - Pode listar e visualizar agendamentos
+
+Este usuário possui apenas permissões de leitura (GET) para pets e agendamentos. Não pode criar, editar ou deletar nenhum recurso.
 
 ## Funcionalidades Extras
 
