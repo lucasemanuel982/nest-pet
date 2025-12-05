@@ -272,8 +272,3 @@ Irá gerar uma rota e com isso dará para realizar os testes.
 - **Jest** - Framework de testes
 - **bcrypt** - Hash de senhas
 - **class-validator** - Validação de DTOs
-
-
-
-
-
