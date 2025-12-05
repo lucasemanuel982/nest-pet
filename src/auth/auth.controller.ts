@@ -14,10 +14,10 @@ export class AuthController {
   @Post('register')
   @Throttle({ default: { limit: 100, ttl: 60000 } })
   @ApiOperation({ summary: 'Registrar um novo usuário' })
-  @ApiResponse({ status: 201, description: 'Usuário criado com sucesso' })
-  @ApiResponse({ status: 400, description: 'Dados inválidos' })
-  @ApiResponse({ status: 401, description: 'Email já está em uso' })
-  @ApiResponse({ status: 429, description: 'Muitas requisições' })
+  @ApiResponse({ status: 201, description: 'Usuário criado com sucesso!' })
+  @ApiResponse({ status: 400, description: 'Dados inválidos!' })
+  @ApiResponse({ status: 401, description: 'Email já está em uso!' })
+  @ApiResponse({ status: 429, description: 'Limite de requisições atingido!' })
   register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);
   }
@@ -25,9 +25,9 @@ export class AuthController {
   @Post('login')
   @Throttle({ default: { limit: 100, ttl: 60000 } })
   @ApiOperation({ summary: 'Fazer login' })
-  @ApiResponse({ status: 200, description: 'Login realizado com sucesso' })
-  @ApiResponse({ status: 401, description: 'Credenciais inválidas' })
-  @ApiResponse({ status: 429, description: 'Muitas requisições' })
+  @ApiResponse({ status: 200, description: 'Login realizado com sucesso!' })
+  @ApiResponse({ status: 401, description: 'Credenciais inválidas!' })
+  @ApiResponse({ status: 429, description: 'Limite de requisições atingido!' })
   login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
   }
