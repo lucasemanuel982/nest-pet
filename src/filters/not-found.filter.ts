@@ -3,7 +3,6 @@ import {
   Catch,
   NotFoundException,
   ArgumentsHost,
-  HttpException,
   HttpStatus,
 } from '@nestjs/common';
 
@@ -16,7 +15,8 @@ export class NotFoundFilter implements ExceptionFilter {
 
     response.status(HttpStatus.NOT_FOUND).json({
       statusCode: HttpStatus.NOT_FOUND,
-      message: 'Rota não encontrada. Verifique o endereço digitado.',
+      message:
+        'Rota não encontrada. Verifique o endereço digitado e/ ou método da requisição.',
       path: request.url,
       timestamp: new Date().toISOString(),
     });
