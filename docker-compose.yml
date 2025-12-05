@@ -30,7 +30,10 @@ services:
     environment:
       DATABASE_URL: mysql://petuser:petpassword@mysql:3306/pet_management
       JWT_SECRET: your-super-secret-jwt-key-change-in-production
+      JWT_EXPIRES_IN: 7d
       WEBHOOK_URL: https://webhook.site/54a6c8ec-fb87-4444-9674-a52ef69038a7
+      PORT: 3000
+      NODE_ENV: production
     depends_on:
       mysql:
         condition: service_healthy
