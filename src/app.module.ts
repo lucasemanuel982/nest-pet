@@ -8,18 +8,27 @@ import { PetsModule } from './pets/pets.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { AuditModule } from './audit/audit.module';
 import { WebhookModule } from './webhook/webhook.module';
+import * as Joi from 'joi';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      validationSchema: Joi.object({
+        NODE_ENV: Joi.string().valid('development', 'production').required(),
+        PORT: Joi.number().default(3000),
+        DATABASE_URL: Joi.string().required(),
+        JWT_SECRET: Joi.string().required(),
+        JWT_EXPIRES_IN: Joi.string().required(),
+        WEBHOOK_URL: Joi.string().required(),
+      }),
     }),
     LoggerModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
         const nodeEnv = configService.get<string>('NODE_ENV') || 'development';
         const isProduction = nodeEnv === 'production';
-        
+
         return {
           pinoHttp: {
             level: isProduction ? 'info' : 'debug',
