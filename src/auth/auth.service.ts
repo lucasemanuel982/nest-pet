@@ -23,8 +23,7 @@ export class AuthService {
       throw new UnauthorizedException('Email já está em uso');
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await this.prisma.user.create({
       data: {

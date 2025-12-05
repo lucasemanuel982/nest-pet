@@ -26,7 +26,7 @@ import * as Joi from 'joi';
     LoggerModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
-        const nodeEnv = configService.get<string>('NODE_ENV') || 'development';
+        const nodeEnv = configService.get<string>('NODE_ENV');
         const isProduction = nodeEnv === 'production';
 
         return {
