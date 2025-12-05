@@ -5,7 +5,6 @@ import {
   ApiResponse,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { PermissionsGuard } from '../auth/permissions.guard';
 import { Roles } from '../auth/roles.decorator';
@@ -15,7 +14,6 @@ import { UsersService } from './users.service';
 
 @ApiTags('Usuários')
 @Controller('users')
-@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

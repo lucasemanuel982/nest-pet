@@ -20,13 +20,12 @@ import {
 import { PetsService } from './pets.service';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { PermissionsGuard } from '../auth/permissions.guard';
 import { RequirePermissions } from '../auth/permissions.decorator';
 
 @ApiTags('Pets')
 @Controller('pets')
-@UseGuards(JwtAuthGuard, PermissionsGuard)
+@UseGuards(PermissionsGuard)
 @ApiBearerAuth()
 export class PetsController {
   constructor(private readonly petsService: PetsService) {}

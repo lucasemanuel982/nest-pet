@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
 import { DatabaseModule } from './database/database.module';
@@ -8,6 +9,7 @@ import { PetsModule } from './pets/pets.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { AuditModule } from './audit/audit.module';
 import { WebhookModule } from './webhook/webhook.module';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import * as Joi from 'joi';
 
 @Module({
@@ -65,6 +67,12 @@ import * as Joi from 'joi';
     SchedulesModule,
     AuditModule,
     WebhookModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
 })
 export class AppModule {}

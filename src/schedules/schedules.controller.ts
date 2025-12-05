@@ -22,13 +22,12 @@ import {
 import { SchedulesService } from './schedules.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { PermissionsGuard } from '../auth/permissions.guard';
 import { RequirePermissions } from '../auth/permissions.decorator';
 
 @ApiTags('Agendamentos')
 @Controller('schedules')
-@UseGuards(JwtAuthGuard, PermissionsGuard)
+@UseGuards(PermissionsGuard)
 @ApiBearerAuth()
 export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}

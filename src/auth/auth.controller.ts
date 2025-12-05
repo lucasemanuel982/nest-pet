@@ -4,6 +4,7 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { Public } from './public.decorator';
 
 @ApiTags('Autenticação')
 @Controller('auth')
@@ -11,6 +12,7 @@ import { LoginDto } from './dto/login.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Post('register')
   @Throttle({ default: { limit: 100, ttl: 60000 } })
   @ApiOperation({ summary: 'Registrar um novo usuário' })
@@ -22,6 +24,7 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
+  @Public()
   @Post('login')
   @Throttle({ default: { limit: 100, ttl: 60000 } })
   @ApiOperation({ summary: 'Fazer login' })

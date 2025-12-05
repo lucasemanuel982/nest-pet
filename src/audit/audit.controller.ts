@@ -13,7 +13,6 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 import { AuditService } from './audit.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { PermissionsGuard } from '../auth/permissions.guard';
 import { Roles } from '../auth/roles.decorator';
@@ -22,7 +21,7 @@ import { Role } from '../auth/roles.enum';
 
 @ApiTags('Auditoria')
 @Controller('audit')
-@UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
+@UseGuards(RolesGuard, PermissionsGuard)
 @ApiBearerAuth()
 export class AuditController {
   constructor(private readonly auditService: AuditService) {}
