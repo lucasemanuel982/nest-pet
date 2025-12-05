@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
@@ -14,32 +14,40 @@ import { WebhookModule } from './webhook/webhook.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    LoggerModule.forRoot({
-      pinoHttp: {
-        level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
-        transport:
-          process.env.NODE_ENV !== 'production'
-            ? {
-                target: 'pino-pretty',
-                options: {
-                  colorize: true,
-                  translateTime: 'SYS:dd-mm-yyyy HH:MM:ss',
-                  ignore: 'pid,hostname',
-                  singleLine: false,
-                },
-              }
-            : undefined,
-        serializers: {
-          req: (req) => ({
-            id: req.id,
-            method: req.method,
-            url: req.url,
-          }),
-          res: (res) => ({
-            statusCode: res.statusCode,
-          }),
-        },
+    LoggerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => {
+        const nodeEnv = configService.get<string>('NODE_ENV') || 'development';
+        const isProduction = nodeEnv === 'production';
+        
+        return {
+          pinoHttp: {
+            level: isProduction ? 'info' : 'debug',
+            transport: !isProduction
+              ? {
+                  target: 'pino-pretty',
+                  options: {
+                    colorize: true,
+                    translateTime: 'SYS:dd-mm-yyyy HH:MM:ss',
+                    ignore: 'pid,hostname',
+                    singleLine: false,
+                  },
+                }
+              : undefined,
+            serializers: {
+              req: (req) => ({
+                id: req.id,
+                method: req.method,
+                url: req.url,
+              }),
+              res: (res) => ({
+                statusCode: res.statusCode,
+              }),
+            },
+          },
+        };
       },
+      inject: [ConfigService],
     }),
     DatabaseModule,
     AuthModule,
