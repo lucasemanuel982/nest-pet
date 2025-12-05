@@ -23,6 +23,7 @@ async function main() {
     { slug: 'schedule_read', description: 'Ler agendamentos' },
     { slug: 'schedule_update', description: 'Atualizar agendamentos' },
     { slug: 'schedule_delete', description: 'Deletar agendamentos' },
+    { slug: 'audit_read', description: 'Ler logs de auditoria' },
   ];
 
   for (const p of permissions) {
